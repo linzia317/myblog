@@ -1,0 +1,84 @@
+将 Python 脚本封装成一个可执行文件（`.exe`），可以通过以下步骤完成。常用的工具是 **PyInstaller**，它简单易用且支持多平台。
+
+---
+
+### 步骤 1：安装 PyInstaller
+首先确保你的 Python 环境已经安装了 PyInstaller。如果没有安装，可以通过以下命令安装：
+
+```bash
+pip install pyinstaller
+```
+
+### 步骤 2：准备 Python 脚本
+确保你的 Python 脚本可以独立运行。例如，创建一个简单的脚本 `hello.py`：
+
+```python
+# hello.py
+print("Hello, World!")
+```
+
+### 步骤 3：使用 PyInstaller 打包
+在命令行中进入脚本所在的目录，并运行以下命令：
+
+```bash
+pyinstaller --onefile hello.py
+```
+
+**说明**：
+- `--onefile` 参数会将所有依赖项打包成一个单独的 `.exe` 文件。
+- 运行后，PyInstaller 会创建几个文件夹，包括 `dist` 和 `build`。
+- 打包好的 `.exe` 文件会在 `dist` 文件夹中找到。
+
+### 步骤 4：运行生成的 .exe 文件
+进入 `dist` 文件夹，双击运行 `hello.exe`，或者在命令行中运行：
+
+```bash
+dist\hello.exe
+```
+
+### 高级选项
+1. **添加图标**：
+   如果希望为 `.exe` 文件添加自定义图标，可以使用 `--icon` 参数：
+   ```bash
+   pyinstaller --onefile --icon=myicon.ico hello.py
+   ```
+   图标文件必须是 `.ico` 格式。
+
+2. **隐藏控制台窗口**：
+   如果你的脚本是 GUI 应用程序，而不需要控制台窗口，可以添加 `--noconsole` 参数：
+   ```bash
+   pyinstaller --onefile --noconsole hello.py
+   ```
+
+3. **指定额外文件**：
+   如果你的脚本需要额外的资源文件（如图片、配置文件），可以通过 `--add-data` 参数添加：
+   ```bash
+   pyinstaller --onefile --add-data "config.json;." hello.py
+   ```
+   这里的格式是 `文件路径;目标路径`，Windows 使用分号，Linux/Mac 使用冒号。
+
+4. **生成调试信息**：
+   如果需要调试信息，可以使用 `--debug` 参数：
+   ```bash
+   pyinstaller --onefile --debug hello.py
+   ```
+
+---
+
+### 常见问题
+1. **打包后运行慢**：
+   - 第一次运行 `.exe` 文件时，解压缩依赖会较慢，之后会更快。
+   
+2. **缺少动态链接库 (DLL)**：
+   - 有时打包的 `.exe` 文件可能会提示缺少某些 DLL。可以尝试更新 PyInstaller 或手动添加丢失的库。
+
+3. **文件太大**：
+   - Python 打包后生成的 `.exe` 文件较大是正常的，因为所有依赖项都被包含在内。可以使用 `UPX` 压缩：
+     ```bash
+     pyinstaller --onefile --upx-dir=path_to_upx hello.py
+     ```
+
+---
+
+### 小结
+通过 PyInstaller，将 Python 脚本转换成 `.exe` 非常方便。按照上面的步骤，你就可以轻松生成独立运行的 Windows 应用。如果你需要更复杂的打包配置，可以修改生成的 `.spec` 文件来满足定制需求！
